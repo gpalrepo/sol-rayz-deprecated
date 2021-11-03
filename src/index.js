@@ -78,6 +78,6 @@ export const getParsedNftAccountsByOwner = async (
     .map(({ value }) => value);
 };
 
-export const normalizeMetaStrings = (meta) => {
+export const sanitizeMetaStrings = (meta) => {
   meta.replace(/\0/g, '');
 };
