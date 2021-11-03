@@ -1,13 +1,13 @@
-const { deserializeUnchecked } = require('borsh');
-const { PublicKey } = require('@solana/web3.js');
-const {
+import { deserializeUnchecked } from 'borsh';
+import { PublicKey } from '@solana/web3.js';
+import {
   METADATA_SCHEMA,
   Metadata,
   METADATA_PREFIX,
   METADATA_PROGRAM,
-} = require('./config/metaplex');
+} from './config/metaplex';
 
-const extendBorsh = require('./config/borsh');
+import { extendBorsh } from './config/borsh';
 
 extendBorsh();
 
@@ -15,13 +15,11 @@ const metaProgamPublicKey = new PublicKey(METADATA_PROGRAM);
 const metaProgamPublicKeyBuffer = metaProgamPublicKey.toBuffer();
 const metaProgamPrefixBuffer = Buffer.from(METADATA_PREFIX);
 
-const decodeTokenMetadata = async (buffer) => {
-  console.log(buffer);
-  console.log(deserializeUnchecked(METADATA_SCHEMA, Metadata, buffer));
+export const decodeTokenMetadata = async (buffer) => {
   return deserializeUnchecked(METADATA_SCHEMA, Metadata, buffer);
 };
 
-async function getSolanaMetadataAddress(tokenMint) {
+export async function getSolanaMetadataAddress(tokenMint) {
   const metaProgamPublicKey = new PublicKey(METADATA_PROGRAM);
   return (
     await PublicKey.findProgramAddress(
@@ -30,8 +28,3 @@ async function getSolanaMetadataAddress(tokenMint) {
     )
   )[0];
 }
-
-module.exports = {
-  decodeTokenMetadata,
-  getSolanaMetadataAddress,
-};

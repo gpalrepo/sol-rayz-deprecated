@@ -1,7 +1,7 @@
-const { PublicKey } = require('@solana/web3.js');
-const { BinaryReader, BinaryWriter } = require('borsh');
+import { PublicKey } from '@solana/web3.js';
+import { BinaryReader, BinaryWriter } from 'borsh';
 
-const extendBorsh = () => {
+export const extendBorsh = () => {
   BinaryReader.prototype.readPubkey = function() {
     const reader = this;
     const array = reader.readFixedArray(32);
@@ -13,5 +13,3 @@ const extendBorsh = () => {
     writer.writeFixedArray(value.toBuffer());
   };
 };
-
-module.exports = extendBorsh;

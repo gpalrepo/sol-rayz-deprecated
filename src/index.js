@@ -3,7 +3,7 @@ import chunks from 'lodash.chunk';
 import { decodeTokenMetadata, getSolanaMetadataAddress } from './utils';
 import { TOKEN_PROGRAM } from './config/solana';
 
-const getParsedNftAccountsByOwner = async (
+export const getParsedNftAccountsByOwner = async (
   address,
   clusterApi = clusterApiUrl('mainnet-beta'),
   commitment = 'confirmed'
@@ -78,12 +78,6 @@ const getParsedNftAccountsByOwner = async (
     .map(({ value }) => value);
 };
 
-const normalizeMetaStrings = (meta) => {
+export const normalizeMetaStrings = (meta) => {
   meta.replace(/\0/g, '');
-};
-
-module.exports = {
-  getParsedNftAccountsByOwner,
-  decodeTokenMetadata,
-  normalizeMetaStrings,
 };

@@ -71,9 +71,4 @@ const METADATA_SCHEMA = new Map([
   ],
 ]);
 
-module.exports = {
-  METADATA_SCHEMA,
-  METADATA_PREFIX,
-  METADATA_PROGRAM,
-  Metadata,
-};
+export { METADATA_SCHEMA, METADATA_PREFIX, METADATA_PROGRAM, Metadata };
