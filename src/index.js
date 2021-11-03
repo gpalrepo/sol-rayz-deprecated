@@ -3,12 +3,16 @@ import chunks from 'lodash.chunk';
 import { decodeTokenMetadata, getSolanaMetadataAddress } from './utils';
 import { TOKEN_PROGRAM } from './config/solana';
 
-export const getParsedNftAccountsByOwner = async (
-  address,
+export const createConnectionConfig = (
   clusterApi = clusterApiUrl('mainnet-beta'),
   commitment = 'confirmed'
+) => new Connection(clusterApi, commitment);
+
+export const getParsedNftAccountsByOwner = async (
+  address,
+  connection = createConnectionConfig(),
+  serialization = true
 ) => {
-  let connection = new Connection(clusterApi, commitment);
   // TODO: Needs performace test
   // getParsedTokenAccountsByOwner vs getTokenAccountsByOwner + partial parsing
   // vs RPC getTokenAccountsByOwner with slice + partial parsing
@@ -75,9 +79,21 @@ export const getParsedNftAccountsByOwner = async (
   // filter and map vs reduce vs for
   return accountsDecodedMeta
     .filter((result) => result && result.status === 'fulfilled')
-    .map(({ value }) => value);
+    .map(({ value }) => (serialization ? sanitizeTokenMeta(value) : value));
 };
 
-export const sanitizeMetaStrings = (meta) => {
-  meta.replace(/\0/g, '');
+const sanitizeTokenMeta = (tokenData) => {
+  return {
+    ...tokenData,
+    data: {
+      ...tokenData.data,
+      name: sanitizeMetaStrings(tokenData?.data?.name),
+      symbol: sanitizeMetaStrings(tokenData?.data?.symbol),
+      uri: sanitizeMetaStrings(tokenData?.data?.uri),
+    },
+  };
+};
+
+export const sanitizeMetaStrings = (metaString) => {
+  return metaString.replace(/\0/g, '');
 };
