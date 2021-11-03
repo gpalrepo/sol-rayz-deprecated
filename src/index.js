@@ -48,8 +48,7 @@ export const getParsedNftAccountsByOwner = async (
     })
   );
 
-  // TODO: Needs performace test
-  // filter and map vs reduce vs for
+  // TODO: revrite with for loop
   const acountsMetaAddress = acountsMetaAddressPromises
     .filter((result) => result && result.status === 'fulfilled')
     .map(({ value }) => value);
@@ -64,8 +63,7 @@ export const getParsedNftAccountsByOwner = async (
     })
   );
 
-  // TODO: Needs performace test
-  // filter, and flatMap vs reduce vs for
+  // TODO: revrite with for loop
   const accountsRawMeta = accountsRawMetaResponse
     .filter(({ status }) => status === 'fulfilled')
     .flatMap(({ value }) => value);
@@ -75,8 +73,7 @@ export const getParsedNftAccountsByOwner = async (
       return decodeTokenMetadata(accountInfo?.data);
     })
   );
-  // TODO: Needs performace test
-  // filter and map vs reduce vs for
+  // TODO: revrite with for loop
   return accountsDecodedMeta
     .filter((result) => result && result.status === 'fulfilled')
     .map(({ value }) => (serialization ? sanitizeTokenMeta(value) : value));
