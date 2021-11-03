@@ -49,7 +49,7 @@ export const getParsedNftAccountsByOwner = async (
   );
 
   const acountsMetaAddress = acountsMetaAddressPromises
-    .filter((result) => result && result.status === 'fulfilled')
+    .filter(onlySuccessfull)
     .map(({ value }) => value);
 
   const accountsRawMetaResponse = await Promise.allSettled(
@@ -73,7 +73,8 @@ export const getParsedNftAccountsByOwner = async (
   );
 
   return accountsDecodedMeta
-    .filter((result) => result && result.status === 'fulfilled')
+    .filter(onlySuccessfull)
+    .filter(removeNftWithoutMetadataUri)
     .map(({ value }) => (serialization ? sanitizeTokenMeta(value) : value));
 };
 
@@ -91,4 +92,11 @@ const sanitizeTokenMeta = (tokenData) => {
 
 export const sanitizeMetaStrings = (metaString) => {
   return metaString.replace(/\0/g, '');
+};
+
+const onlySuccessfull = (result) => result && result.status === 'fulfilled';
+
+const removeNftWithoutMetadataUri = (t) => {
+  const uri = t.value.data?.uri?.replace?.(/\0/g, '');
+  return uri !== '' && uri !== undefined;
 };

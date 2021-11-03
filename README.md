@@ -2,6 +2,14 @@
 
 Package to simplify work with Solana NFTs
 
+## Installation
+
+```
+npm i @nfteyez/sol-rayz
+```
+
+## Use
+
 createConnectionConfig - method for creating a "connection" with Solana, have two params: clusterApi and commitment
 
 getParsedNftAccountsByOwner - method to get array of parsed NFTs by owner address.
