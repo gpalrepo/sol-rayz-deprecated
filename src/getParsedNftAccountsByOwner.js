@@ -22,7 +22,7 @@ export const getParsedNftAccountsByOwner = async ({
   strictNftStandard = false,
 }) => {
   const isValidAddress = isValidSolanaAddress(publicAddress);
-  if (!isValidAddress) return null;
+  if (!isValidAddress) return [];
 
   // TODO: Needs performace test
   // getParsedTokenAccountsByOwner vs getTokenAccountsByOwner + partial parsing
@@ -84,7 +84,7 @@ export const getParsedNftAccountsByOwner = async ({
 
   return accountsDecodedMeta
     .filter(onlySuccessfull)
-    .filter(removeNftWithoutMetadataUri)
+    .filter(onlyNftsWithMetadata)
     .map(({ value }) => (serialization ? sanitizeTokenMeta(value) : value));
 };
 
@@ -106,7 +106,7 @@ export const sanitizeMetaStrings = (metaString) => {
 
 const onlySuccessfull = (result) => result && result.status === 'fulfilled';
 
-const removeNftWithoutMetadataUri = (t) => {
+const onlyNftsWithMetadata = (t) => {
   const uri = t.value.data?.uri?.replace?.(/\0/g, '');
   return uri !== '' && uri !== undefined;
 };
